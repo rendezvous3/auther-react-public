@@ -2,12 +2,24 @@
 
 var app = require('express')();
 var path = require('path');
-
+const session = require('express-session');
 // "Enhancing" middleware (does not send response, server-side effects only)
+
+app.use(session({
+  secret: 'twas brilling',
+  // resave: false,
+  // saveUninitialized: false
+}))
 
 app.use(require('./logging.middleware'));
 
 app.use(require('./body-parsing.middleware'));
+
+app.use('/api', (req, res, next) => {
+  if(!req.session.counter) req.session.counter = 0;
+  console.log('counter: ', ++req.session.counter);
+  next();
+})
 
 
 // "Responding" middleware (may send a response back to client)
