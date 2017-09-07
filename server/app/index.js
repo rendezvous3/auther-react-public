@@ -7,8 +7,8 @@ const session = require('express-session');
 
 app.use(session({
   secret: 'twas brilling',
-  // resave: false,
-  // saveUninitialized: false
+  resave: false,
+  saveUninitialized: false
 }))
 
 app.use(require('./logging.middleware'));
@@ -18,6 +18,12 @@ app.use(require('./body-parsing.middleware'));
 app.use('/api', (req, res, next) => {
   if(!req.session.counter) req.session.counter = 0;
   console.log('counter: ', ++req.session.counter);
+  next();
+})
+
+app.use('/api', (req, res, next) => {
+  if(!req.session.counter) req.session.counter = 0;
+  console.log('session', req.session);
   next();
 })
 
