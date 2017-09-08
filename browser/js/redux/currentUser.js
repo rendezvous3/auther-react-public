@@ -32,7 +32,7 @@ export const loginAndGoToUser = credentials =>
 
 // REDUCER
 
-export default function reducer(currentUser = {}, action) {
+export default function reducer(currentUser = null, action) {
     switch(action.type) {
         case SET:
             return action.user;
