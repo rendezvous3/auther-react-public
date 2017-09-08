@@ -1,6 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { login as reduxLogin } from '../redux/currentUser';
+import { browserHistory } from 'react-router';
+//import { browserHistory } from 'react-router-dom';
+import { loginAndGoToUser as reduxLogin } from '../redux/currentUser';
 
 /* -----------------    COMPONENT     ------------------ */
 
@@ -68,6 +70,12 @@ class Login extends React.Component {
     // const thunk = login(user);
     // store.dispatch(thunk);
     this.props.reactLogin(user)
+    // .then(loggedInUser => {
+    //   console.log(loggedInUser);
+    //   console.log(browserHistory);
+    //   browserHistory.push(`/users/${loggedInUser.id}`)
+    // })
+    // .catch(console.error.bind(console))
     //console.log(`${message} isn't implemented yet`, user);
   }
 }

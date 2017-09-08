@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { browserHistory } from 'react-router-dom';
 
 // CONSTANTS
 
@@ -17,8 +18,17 @@ export const login = credentials =>
     dispatch =>
         axios.put('/api/auth/me', credentials)
         .then(resToData)
-        .then(user => dispatch(set(user)))
-        .catch(logErr)
+        .then(user =>{
+            dispatch(set(user))
+            return user;
+        }) 
+        
+
+export const loginAndGoToUser = credentials =>
+    dispatch =>
+        dispatch(login(credentials))
+        .then(user => browserHistory.push(`/users/${user.id}`))
+        .catch(logErr) 
 
 // REDUCER
 
