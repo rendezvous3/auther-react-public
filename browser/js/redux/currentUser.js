@@ -4,10 +4,12 @@ import { browserHistory } from 'react-router-dom';
 // CONSTANTS
 
 const SET = 'SET_CURRENT_USER';
+const REMOVE = 'REMOVE_CURRENT_USER';
 
 // ACTIONS CREATORS
 
-const set = user => ({ type: SET,  user })
+const set = user => ({ type: SET,  user });
+const remove = () => ({ type: REMOVE });
 
 // THUNKED ACTION CREATORS
 
@@ -36,6 +38,8 @@ export default function reducer(currentUser = null, action) {
     switch(action.type) {
         case SET:
             return action.user;
+        case REMOVE:
+            return null;            
         default:
             return currentUser;
     }
@@ -47,3 +51,15 @@ export const retrieveLoggedInUser = () =>
         .then(resToData)
         .then(user => dispatch(set(user)))
         .catch(logErr)
+
+const logout = () =>
+    dispatch =>
+        axios.delete('/api/auth/me')
+        .then(() => dispatch(remove()))
+        //.catch(logErr);
+
+export const logoutAndGoHome = () => 
+    dispatch =>
+        dispatch(logout())
+        .then(() => browserHistory.push('/'))
+        .catch(logErr)        

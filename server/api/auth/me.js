@@ -8,6 +8,11 @@ router.get('/',(req, res, next) => {
     .catch(next)
 })
 
+router.delete('/', (req, res, next) => {
+    delete req.session.userId;
+    res.sendStatus(200);
+})
+
 // http://localhost:8080/api/auth/me  PUT
 
 // {

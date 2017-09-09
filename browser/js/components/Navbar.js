@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Link, NavLink, withRouter } from 'react-router-dom';
 import history from '../history';
+import { logoutAndGoHome } from '../redux/currentUser';
 
 /* -----------------    COMPONENT     ------------------ */
 
@@ -83,8 +84,9 @@ const mapStateToProps = state => ({
 
 const mapDispatch = dispatch => ({
   logout: () => {
-    console.log('You signed out. Sorta.');
-    history.push('/');
+    dispatch(logoutAndGoHome());
+    // logout();
+    // history.push('/');
   }
 });
 
