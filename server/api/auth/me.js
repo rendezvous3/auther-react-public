@@ -2,6 +2,12 @@ const router = require('express').Router();
 const User = require('../users/user.model');
 const HttpError = require('../../utils/HttpError');
 
+router.get('/',(req, res, next) => {
+    User.findById(req.session.userId)
+    .then(res.json.bind(res))
+    .catch(next)
+})
+
 // http://localhost:8080/api/auth/me  PUT
 
 // {

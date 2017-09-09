@@ -40,3 +40,10 @@ export default function reducer(currentUser = null, action) {
             return currentUser;
     }
 }
+
+export const retrieveLoggedInUser = () =>
+    dispatch =>
+        axios.get('/api/auth/me')
+        .then(resToData)
+        .then(user => dispatch(set(user)))
+        .catch(logErr)

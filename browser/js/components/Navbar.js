@@ -37,8 +37,10 @@ class Navbar extends React.Component {
                 <NavLink to="/stories" activeClassName="active">stories</NavLink>
               </li>
             </ul>
-            { this.props.currentUser && this.renderLogout() }
-            { !this.props.currentUser && this.renderLoginSignup() }
+            { this.props.currentUser 
+              ? this.renderLogout()
+              : this.renderLoginSignup()
+            }
           </div>
         </div>
       </nav>
