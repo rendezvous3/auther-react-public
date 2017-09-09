@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { browserHistory } from 'react-router-dom';
+import { create as createUser } from './users';
 
 // CONSTANTS
 
@@ -15,6 +16,7 @@ const remove = () => ({ type: REMOVE });
 
 const resToData = res => res.data
 const logErr = console.error.bind(console);
+const navToUserPage = user => browserHistory.push(`/users/${user.id}`);
 
 export const login = credentials => 
     dispatch =>
@@ -29,7 +31,7 @@ export const login = credentials =>
 export const loginAndGoToUser = credentials =>
     dispatch =>
         dispatch(login(credentials))
-        .then(user => browserHistory.push(`/users/${user.id}`))
+        .then(navToUserPage)
         .catch(logErr) 
 
 // REDUCER
@@ -62,4 +64,21 @@ export const logoutAndGoHome = () =>
     dispatch =>
         dispatch(logout())
         .then(() => browserHistory.push('/'))
-        .catch(logErr)        
+        .catch(logErr)
+
+
+export const signup = credentials => 
+    dispatch => 
+        axios.post('/api/auth/me', credentials)
+        .then(resToData)
+        .then(user => {
+            dispatch(createUser(user));
+            dispatch(set(user));
+            return user;
+        })
+
+export const signupAndGoToUser = credentials => 
+    dispatch =>
+        dispatch(signup(credentials))
+        .then(navToUserPage)
+        .catch(err => console.error("Problem signing in:", err))                          
