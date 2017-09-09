@@ -3,6 +3,8 @@
 var app = require('express')();
 var path = require('path');
 const session = require('express-session');
+const passport = require('passport');
+const User = require('../api/users/user.model');
 // "Enhancing" middleware (does not send response, server-side effects only)
 
 app.use(session({
@@ -10,6 +12,19 @@ app.use(session({
   resave: false,
   saveUninitialized: false
 }))
+
+app.use(passport.initialize());
+app.use(passport.session());
+
+passport.serializeUser((user, done) => {
+  done(null, user.id);
+})
+
+passport.deserializeUser((id, done) => {
+  User.findById(id)
+    .then(user => done(null, user))
+    .catch(done)
+})
 
 app.use(require('./logging.middleware'));
 
@@ -22,7 +37,7 @@ app.use('/api', (req, res, next) => {
 })
 
 app.use('/api', (req, res, next) => {
-  if(!req.session.counter) req.session.counter = 0;
+  console.log('passport user:', req.user)
   console.log('session', req.session);
   next();
 })

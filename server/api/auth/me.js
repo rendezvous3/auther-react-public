@@ -10,7 +10,11 @@ router.post('/', (req, res, next) => {
     })
     .spread((user, created) => {
         if (created) {
-            req.session.userId = user.id;
+            req.logIn(user, err => { 
+               if(err) next(err)
+               else res.json(user)
+            });
+            //req.session.userId = user.id;
             res.json(user);
         } else {
             throw new HttpError(401);
@@ -19,15 +23,18 @@ router.post('/', (req, res, next) => {
 });
 
 router.get('/',(req, res, next) => {
-    User.findById(req.session.userId)
-    .then(res.json.bind(res))
-    .catch(next)
+    res.json(req.user)
+    // User.findById(req.session.userId)
+    // .then(res.json.bind(res))
+    // .catch(next)
 })
 
 
 router.delete('/', (req, res, next) => {
-    delete req.session.userId;
-    res.sendStatus(200);
+    req.logout();
+    res.sendStatus(204);
+    // delete req.session.userId;
+    // res.sendStatus(200);
 })
 
 
@@ -38,7 +45,11 @@ router.put('/', (req, res, next) => {
    }) 
    .then(user => {
        if(user) {
-           req.session.userId = user.id;
+           req.logIn(user, err => { 
+               if(err) next(err)
+               else res.json(user)
+           });
+           //req.session.userId = user.id;
            //res.json(req.session);
            res.json(user);
        } else {
